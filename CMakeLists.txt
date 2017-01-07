@@ -1,10 +1,38 @@
 cmake_minimum_required(VERSION 2.8)
 
+### Set a default build type if none was specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "")
+  message(STATUS "Setting build type to 'Debug' as none was specified.")
+  message(STATUS "")
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+# by default, force c++11
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# in case we have any c code, use the best c standard ever
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+
+include_directories(${CMAKE_SOURCE_DIR}/src/)
 SET(FUR_SRC
-      HairFactory.cpp
+      src/HairFactory.cpp
+      src/main.cpp
 )
 
-add_executable(fur FUR_SRC)
+
+find_package(GLM REQUIRED)
+include_directories(${GLM_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
+
+
+
+add_executable(fur ${FUR_SRC})
+target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY})
 
 
 set(CMAKE_CXX_FLAGS "-pedantic -std=c++11 -Wall -Werror")
