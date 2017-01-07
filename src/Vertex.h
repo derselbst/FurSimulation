@@ -19,6 +19,7 @@ struct Vertex
     float Mass{1.0f};
     
     // point in 3D space, where this particle is located
+    // just like openGL we use a Right-Handed (Y-up) coordinate system here
     vec3 Position{0.0f,0.0f,0.0f};
     
     // holds a force that will be applied during a subsequent simulation step of this particle

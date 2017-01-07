@@ -16,8 +16,12 @@ Hair HairFactory::GrowHair(const size_t nStrands, const size_t nVert)
 		for(size_t v=0; v<nVert; v++)
 		{
 			strand.push_back(particle);
-			particle.z += Len/nVert;
+                        
+                        // place next particle above the current one
+			particle.y += Len/nVert;
 		}
+		
+		// go to the right
 		startPos.x += 0.01; // some rand val here
 	}
 	
