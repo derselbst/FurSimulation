@@ -18,7 +18,7 @@ Hair HairFactory::GrowHair(const size_t nStrands, const size_t nVert)
 			strand.push_back(particle);
                         
                         // place next particle above the current one
-			particle.y += Len/nVert;
+			particle.Position.y += Len/nVert;
 		}
 		
 		// go to the right
