@@ -28,8 +28,19 @@ void FTL::update()
 	// calc new position
 	vec3 p = x.Position + TimeStep * x.Velocity + TimeStep*TimeStep * x.Force;
 	
-	// TODO solve constraints
 	
+	// solve constraints
+	Vertex& pre = this->hair[s][v-1];
+	
+	vec3 pBackup = p; // backup
+	
+	vec3 direction = p - pre->Position;
+	direction.normalize();
+	
+	p = pre->Position + direction * l0; // constraint p on a sphere of radius l0 around previous vertex
+	
+	
+	// update velocity + final position + force
 	x.Velocity = (p - x.Position) / TimeStep;
 	x.Position = p;
 	x.Force = 0;
