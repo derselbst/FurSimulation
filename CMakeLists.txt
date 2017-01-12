@@ -26,13 +26,16 @@ SET(FUR_SRC
 )
 
 
+find_package(Boost 1.36.0 REQUIRED COMPONENTS system )
+include_directories(${Boost_INCLUDE_DIRS})
+
 find_package(GLM REQUIRED)
 include_directories(${GLM_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
 
 
 
 add_executable(fur ${FUR_SRC})
-target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY})
+target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY} ${Boost_LIBRARIES})
 
 
 set(CMAKE_CXX_FLAGS "-pedantic -std=c++11 -Wall -Werror")
