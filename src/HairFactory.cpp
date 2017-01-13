@@ -9,7 +9,7 @@ Hair HairFactory::GrowHair(const size_t nStrands, const size_t nVert)
 	const double Len = 10.0;
 	for(size_t s=0; s<nStrands; s++)
 	{
-		hair.push_back(vector<Vertex>());
+		hair.push_back(aligned_vector<Vertex>());
 		Strand& strand = hair.back();
 
 		Vertex particle(startPos, 1.0f);

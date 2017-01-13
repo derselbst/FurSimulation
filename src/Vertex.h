@@ -12,8 +12,8 @@ struct Vertex
     Vertex(vec3 pos, float m) : Mass{m}, Position{pos}
     {}
     
-    // whether animating this vertex is enabled or not
-    bool IsEnabled{true};
+//     // whether animating this vertex is enabled or not
+//     bool IsEnabled{true};
     
     // indicates the mass of this particle
     float Mass{1.0f};
