@@ -26,10 +26,10 @@ SET(FUR_SRC
 )
 
 
-find_package(Boost 1.36.0 REQUIRED COMPONENTS system )
+find_package(Boost 1.56.0 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
-find_package(GLM REQUIRED)
+find_package(glm REQUIRED)
 include_directories(${GLM_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
 
 
