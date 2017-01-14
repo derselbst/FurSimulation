@@ -3,9 +3,10 @@
 
 class FTL : public ISimulation
 {
-  FTL(Hair& h);
-  
 public:
+  FTL(Hair& h);
+  ~FTL() override;
+  
   void addForce(vec3 f) override;
   void update() override;
 };

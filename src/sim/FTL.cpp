@@ -4,13 +4,16 @@
 FTL::FTL(Hair& h) : ISimulation(h)
 {}
 
+FTL::~FTL()
+{}
+
 void FTL::addForce(vec3 f)
 {
     for(size_t s=0; s < this->hair.size(); s++)
     {
       for(size_t v=0; v < this->hair[v].size(); v++)
       {
-         this->hair[s][v]->Force += f;
+         this->hair[s][v].Force += f;
       }
     }
 }
@@ -34,16 +37,16 @@ void FTL::update()
 	
 	vec3 pBackup = p; // backup
 	
-	vec3 direction = p - pre->Position;
-	direction.normalize();
+	vec3 direction = p - pre.Position;
+	direction = glm::normalize(direction);
 	
-	p = pre->Position + direction * l0; // constraint p on a sphere of radius l0 around previous vertex
-	
+	p = pre.Position + direction * (1.0f/10.0f); // constraint p on a sphere of radius l0 around previous vertex
+	//p.d = pBackup - p.Pos???
 	
 	// update velocity + final position + force
 	x.Velocity = (p - x.Position) / TimeStep;
 	x.Position = p;
-	x.Force = 0;
+	x.Force = vec3(0,0,0);
       }
     }
     
