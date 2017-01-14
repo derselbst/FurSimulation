@@ -4,9 +4,9 @@
 
 class ISimulation
 {
+protected:
     Hair& hair;
   
-protected:
     // this is an interface, even if there were no pure virtual methods, allow
     // construction for child classes only
     ISimulation(Hair& h) : hair(h)
@@ -19,7 +19,8 @@ public:
     ISimulation& operator=(ISimulation const&) = delete;
 
     // virtual destructor for proper cleanup
-    virtual ~ISimulation();
+    virtual ~ISimulation()
+    {}
 
     
     virtual void addForce(vec3) = 0;
