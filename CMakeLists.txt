@@ -27,6 +27,7 @@ SET(FUR_SRC
       src/main.cpp
 )
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 find_package(Boost 1.56.0 REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
