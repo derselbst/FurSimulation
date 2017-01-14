@@ -2,6 +2,8 @@
 #include "HairFactory.h"
 #include "Visualizer.h"
 
+#include "FTL.h"
+
 #include <iostream>
 
 using namespace std;
@@ -25,11 +27,21 @@ void print(const Hair& h)
 
 int main(int argc, char** argv)
 {
-    Hair h = HairFactory::GrowHair(20/*no. strands*/, 10/*no. of vertices per strand*/);
+    Hair h = HairFactory::GrowHair(100/*no. strands*/, 10/*no. of vertices per strand*/);
     
+    FTL ftl(h);
+    vec3 force(10,0,0);
+    ftl.addForce(force);
+    
+    for(int i=0; i<2; i++)
+    {
+        ftl.update();
+    }
+    
+        
     Visualizer::display(h, argc, argv);
-    
-    print(h);
+        
+//     print(h);
     
     return 0;
 }
