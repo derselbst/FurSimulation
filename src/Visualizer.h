@@ -6,8 +6,8 @@
 #include <vector>
 #include <algorithm>
 
-constexpr int16_t IMAGE_WIDTH   = 720;
-constexpr int16_t IMAGE_HEIGHT  = 720;
+constexpr int16_t IMAGE_WIDTH   = 1600;
+constexpr int16_t IMAGE_HEIGHT  = 1200;
 
 class Visualizer
 {
