@@ -23,8 +23,6 @@ void Visualizer::save_as_ppm()
     glReadBuffer(GL_COLOR_ATTACHMENT0);
     glReadPixels(00, 00, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
 
-    std::reverse(pixels.begin(), pixels.end());
-
     output_image = fopen("image.ppm", "wt");
     fprintf(output_image,"P3\n");
     fprintf(output_image,"%d %d\n",IMAGE_WIDTH,IMAGE_HEIGHT);
