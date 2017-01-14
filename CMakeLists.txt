@@ -19,8 +19,9 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 
-include_directories(${CMAKE_SOURCE_DIR}/src/)
+include_directories(${CMAKE_SOURCE_DIR}/src/ ${CMAKE_SOURCE_DIR}/src/sim)
 SET(FUR_SRC
+      src/sim/FTL.cpp
       src/HairFactory.cpp
       src/Visualizer.cpp
       src/main.cpp
@@ -41,7 +42,7 @@ add_executable(fur ${FUR_SRC})
 target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY} ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
 
-set(CMAKE_CXX_FLAGS "-pedantic -std=c++11 -Wall -Werror")
+set(CMAKE_CXX_FLAGS "-pedantic -std=c++11 -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -DNDEBUG -g")
