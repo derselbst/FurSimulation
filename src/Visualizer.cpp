@@ -1,5 +1,7 @@
 #include "Visualizer.h"
 
+#include <GL/glut.h>
+
 uint16_t Visualizer::no_saved = 0;
 Hair Visualizer::hair;
 

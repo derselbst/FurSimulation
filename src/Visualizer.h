@@ -2,7 +2,6 @@
 #define VISUALIZER_H
 
 #include "HairFactory.h"
-#include <GL/glut.h>
 
 #include <vector>
 #include <algorithm>

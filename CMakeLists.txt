@@ -22,6 +22,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 include_directories(${CMAKE_SOURCE_DIR}/src/)
 SET(FUR_SRC
       src/HairFactory.cpp
+      src/Visualizer.cpp
       src/main.cpp
 )
 
@@ -32,10 +33,12 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(glm REQUIRED)
 include_directories(${GLM_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
 
-
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
 
 add_executable(fur ${FUR_SRC})
-target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY} ${Boost_LIBRARIES})
+target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY} ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
 
 set(CMAKE_CXX_FLAGS "-pedantic -std=c++11 -Wall -Werror")

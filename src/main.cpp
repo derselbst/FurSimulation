@@ -1,5 +1,6 @@
 
 #include "HairFactory.h"
+#include "Visualizer.h"
 
 #include <iostream>
 
@@ -22,9 +23,11 @@ void print(const Hair& h)
 }
 
 
-int main()
+int main(int argc, char** argv)
 {
     Hair h = HairFactory::GrowHair(20/*no. strands*/, 10/*no. of vertices per strand*/);
+    
+    Visualizer::display(h, argc, argv);
     
     print(h);
     
