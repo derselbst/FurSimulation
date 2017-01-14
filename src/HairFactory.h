@@ -2,18 +2,6 @@
 
 #include "Vertex.h"
 
-#include <boost/align/aligned_allocator.hpp>
-#include <vector>
-
-constexpr size_t Alignment = 64;
-
-template<typename T>
-using aligned_vector = std::vector<T, boost::alignment::aligned_allocator<T, Alignment> >;
-
-typedef aligned_vector<Vertex> Strand;
-typedef aligned_vector<Strand> Hair;
-
-
 class HairFactory
 {
 public:

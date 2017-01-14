@@ -1,6 +1,13 @@
 #pragma once
 
+#include <vector>
 #include <glm/glm.hpp>
+#include <boost/align/aligned_allocator.hpp>
+
+constexpr size_t Alignment = 64;
+
+template<typename T>
+using aligned_vector = std::vector<T, boost::alignment::aligned_allocator<T, Alignment> >;
 
 typedef glm::vec3 vec3;
 
@@ -28,3 +35,9 @@ struct Vertex
     // we have to remember the velocity applied to this particle during last simulation step
     vec3 Velocity{0.0f,0.0f,0.0f};
 };
+
+
+
+
+typedef aligned_vector<Vertex> Strand;
+typedef aligned_vector<Strand> Hair;
