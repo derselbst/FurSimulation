@@ -16,7 +16,7 @@ struct Vertex
     Vertex()
     {}
     
-    Vertex(vec3 pos, float m) : Mass{m}, Position{pos}
+    Vertex(vec3 pos, float l0, float m) : Mass{m}, Position{pos}, L0(l0)
     {}
     
 //     // whether animating this vertex is enabled or not
@@ -34,6 +34,12 @@ struct Vertex
     
     // we have to remember the velocity applied to this particle during last simulation step
     vec3 Velocity{0.0f,0.0f,0.0f};
+    
+//     // the correction vector computed during last run to constraint this->Position on a spehere around its predecessor
+//     vec3 Correction{0.0f,0.0f,0.0f};
+    
+    // the l0 length as described in the paper, i.e. the distance to the adjacent vertex
+    /*const*/ float L0; // meant to be const, but it deletes our copy ctor :(
 };
 
 
