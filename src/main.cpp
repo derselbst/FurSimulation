@@ -34,12 +34,12 @@ int main(int argc, char** argv)
     vec3 force(10,0,0);
     ftl.addForce(force);
     
-    for(int i=0; i<2; i++)
+    for(int i=0; i<60000; i++)
     {
         ftl.update();
+        Visualizer::update(h);
     }
     
-    Visualizer::update(h);        
 //    Visualizer::display(h, argc, argv);
         
 //     print(h);
