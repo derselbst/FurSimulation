@@ -1,5 +1,8 @@
 #include "Visualizer.h"
 
+#include <exception>
+#include <stdexcept>
+
 uint16_t Visualizer::no_saved = 0;
 Hair Visualizer::hair;
 
@@ -25,6 +28,10 @@ void Visualizer::save_as_ppm()
     sprintf (buffer, "pictures/%04d.ppm", no_saved);
     ++no_saved;
     std::ofstream fout(buffer);
+    if(!fout.good())
+    {
+        throw std::runtime_error("something is wrong with outstream for ppm. does the pic directory exist?");
+    }
 
     fout << "P3" << std::endl << IMAGE_WIDTH << " " << IMAGE_HEIGHT << std::endl << 255 << std::endl;
 
