@@ -48,7 +48,7 @@ void FTL::update()
         
         
         // correction vector for satisfying the constraint
-        vec3 d = pBackup - p; // (6)
+        vec3 d = p - pBackup; // (6)
 	
 	// update velocity + final position + force
 // 	x.Velocity = (p - x.Position) / TimeStep; // (3)
