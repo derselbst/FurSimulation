@@ -30,7 +30,7 @@ void Visualizer::save_as_ppm()
     std::ofstream fout(buffer);
     if(!fout.good())
     {
-        throw std::runtime_error("something is wrong with outstream for ppm. does the pic directory exist?");
+        throw std::runtime_error("something is wrong with outstream for ppm. does the pictures directory exist?");
     }
 
     fout << "P3" << std::endl << IMAGE_WIDTH << " " << IMAGE_HEIGHT << std::endl << 255 << std::endl;
