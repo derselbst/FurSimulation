@@ -28,7 +28,8 @@ void print(const Hair& h)
 int main(int argc, char** argv)
 {
     Hair h = HairFactory::GrowHair(100/*no. strands*/, 10/*no. of vertices per strand*/);
-    
+    Visualizer::init(argc, argv);    
+
     FTL ftl(h);
     vec3 force(10,0,0);
     ftl.addForce(force);
@@ -38,8 +39,8 @@ int main(int argc, char** argv)
         ftl.update();
     }
     
-        
-    Visualizer::display(h, argc, argv);
+    Visualizer::update(h);        
+//    Visualizer::display(h, argc, argv);
         
 //     print(h);
     
