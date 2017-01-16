@@ -36,8 +36,12 @@ int main(int argc, char** argv)
     
     for(int i=0; i<60000; i++)
     {
+        if(i%4 == 0)
+        {
+            Visualizer::update(h);
+        }
+        
         ftl.update();
-        Visualizer::update(h);
     }
     
 //    Visualizer::display(h, argc, argv);
