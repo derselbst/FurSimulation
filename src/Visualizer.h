@@ -2,12 +2,15 @@
 #define VISUALIZER_H
 
 #include "HairFactory.h"
+//#include <GL/glut.h>
+#include <GL/freeglut.h>
 
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
-constexpr int16_t IMAGE_WIDTH   = 1600;
-constexpr int16_t IMAGE_HEIGHT  = 1200;
+constexpr int16_t IMAGE_WIDTH   = 720;
+constexpr int16_t IMAGE_HEIGHT  = 720;
 
 class Visualizer
 {
@@ -18,8 +21,10 @@ public:
     Visualizer();
     virtual ~Visualizer();
 
-    static void display(Hair h, int argc, char **argv);
+    static void init(int argc, char **argv);
     static void save_as_ppm();
+
+    static void update(Hair h);
 
 protected:
 

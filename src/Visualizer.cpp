@@ -1,42 +1,41 @@
 #include "Visualizer.h"
 
-#include <GL/glut.h>
-
 uint16_t Visualizer::no_saved = 0;
 Hair Visualizer::hair;
 
-Visualizer::Visualizer()
-{
-}
-
-Visualizer::~Visualizer()
-{
-}
+//Visualizer::Visualizer()
+//{
+//}
+//
+//Visualizer::~Visualizer()
+//{
+//}
 
 void Visualizer::save_as_ppm()
 {
-    FILE    *output_image;
-
     std::vector<uint8_t> pixels;
     pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH * 3);
 
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
-    glReadPixels(00, 00, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+    glReadBuffer(GL_COLOR_ATTACHMENT3);
+    glReadPixels(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
 
-    output_image = fopen("image.ppm", "wt");
-    fprintf(output_image,"P3\n");
-    fprintf(output_image,"%d %d\n",IMAGE_WIDTH,IMAGE_HEIGHT);
-    fprintf(output_image,"255\n");
+    std::reverse(pixels.begin(), pixels.end());
+
+    char buffer [50];
+    sprintf (buffer, "pictures/%04d.ppm", no_saved);
+    ++no_saved;
+    std::ofstream fout(buffer);
+
+    fout << "P3" << std::endl << IMAGE_WIDTH << " " << IMAGE_HEIGHT << std::endl << 255 << std::endl;
 
     int32_t k = 0;
     for(int32_t i=0; i<IMAGE_WIDTH; i++)
     {
         for(int32_t j=0; j<IMAGE_HEIGHT; j++)
         {
-            fprintf(output_image,"%u %u %u ", pixels[k], pixels[k+1], pixels[k+2]);
-            k = k+3;
+            fout << static_cast<unsigned>(pixels[k]) << " " << static_cast<unsigned>(pixels[k+1]) << " " << static_cast<unsigned>(pixels[k+2]) << std::endl;
+            k += 3;
         }
-        fprintf(output_image,"\n");
     }
 }
 
@@ -54,17 +53,21 @@ void Visualizer::draw_hair()
     }
     glEnd();
     glFlush();
-    glDrawBuffer(GL_COLOR_ATTACHMENT0);
+    glDrawBuffer(GL_COLOR_ATTACHMENT3);
     Visualizer::save_as_ppm();
 }
 
-void Visualizer::display(Hair h, int argc, char **argv)
-{
+void Visualizer::update (Hair h) {
     hair = h;
+    draw_hair();
+}
+
+void Visualizer::init(int argc, char **argv)
+{
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE);
     glutInitWindowSize(IMAGE_WIDTH, IMAGE_HEIGHT);
     glutCreateWindow("Hair");
     glutDisplayFunc(Visualizer::draw_hair);
-    glutMainLoop();
+    glutMainLoopEvent();
 }
