@@ -62,7 +62,7 @@ void Visualizer::draw_hair()
     glEnd();
     glFlush();
     glDrawBuffer(GL_COLOR_ATTACHMENT3);
-    Visualizer::save_as_ppm();
+//     Visualizer::save_as_ppm();
 }
 
 void Visualizer::update (Hair h) {
