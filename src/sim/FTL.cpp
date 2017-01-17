@@ -20,8 +20,8 @@ void FTL::addForce(vec3 f)
 
 void FTL::update()
 {
-  constexpr float TimeStep = 1.0f/20.0f; // mentioned as dt
-  constexpr float Damping = 0.9f; //sDamping
+  constexpr float TimeStep = 1.0f/125.0f; // mentioned as dt
+  constexpr float Damping = 0.96f; //sDamping
   
     for(size_t s=0; s < this->hair.size(); s++)
     {

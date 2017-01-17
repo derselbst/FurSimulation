@@ -5,7 +5,7 @@ using namespace std;
 Hair HairFactory::GrowHair(const size_t nStrands, const size_t nVert)
 {
 	Hair hair;//(nStrands, vector<Vertex>(nVert, Vertex() ))
-	vec3 startPos(-0.5,-0.5,0);
+	vec3 startPos(-0.5,0.5,0);
 	const double Len = 0.5;
 	for(size_t s=0; s<nStrands; s++)
 	{
