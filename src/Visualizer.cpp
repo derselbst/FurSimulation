@@ -24,7 +24,7 @@ void Visualizer::save_as_ppm()
 
     std::reverse(pixels.begin(), pixels.end());
 
-    char buffer [50];
+    static char buffer [50];
     sprintf (buffer, "pictures/%04d.ppm", no_saved);
     ++no_saved;
     std::ofstream fout(buffer);
@@ -33,16 +33,17 @@ void Visualizer::save_as_ppm()
         throw std::runtime_error("something is wrong with outstream for ppm. does the pictures directory exist?");
     }
 
-    fout << "P3" << std::endl << IMAGE_WIDTH << " " << IMAGE_HEIGHT << std::endl << 255 << std::endl;
+    fout << "P3" << "\n" << IMAGE_WIDTH << " " << IMAGE_HEIGHT << "\n" << 255 << "\n";
 
     int32_t k = 0;
-    for(int32_t i=0; i<IMAGE_WIDTH; i++)
+    for(int32_t i=0; i<IMAGE_HEIGHT; i++)
     {
-        for(int32_t j=0; j<IMAGE_HEIGHT; j++)
+        for(int32_t j=0; j<IMAGE_WIDTH; j++)
         {
-            fout << static_cast<unsigned>(pixels[k]) << " " << static_cast<unsigned>(pixels[k+1]) << " " << static_cast<unsigned>(pixels[k+2]) << std::endl;
+            fout << static_cast<unsigned>(pixels[k]) << " " << static_cast<unsigned>(pixels[k+1]) << " " << static_cast<unsigned>(pixels[k+2]) << " ";
             k += 3;
         }
+        fout<<"\n";
     }
 }
 
