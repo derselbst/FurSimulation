@@ -29,6 +29,9 @@ struct Vertex
     // just like openGL we use a Right-Handed (Y-up) coordinate system here
     vec3 Position{0.0f,0.0f,0.0f};
     
+    // for PBD we have to memorize the position of this vertex, before it is being changed a following simulation step
+    vec3 OldPosition{0.0f,0.0f,0.0f};
+    
     // holds a force that will be applied during a subsequent simulation step of this particle
     vec3 Force = vec3(0.0f,0.0f,0.0f);
     
