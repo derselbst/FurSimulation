@@ -22,6 +22,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 include_directories(${CMAKE_SOURCE_DIR}/src/ ${CMAKE_SOURCE_DIR}/src/sim)
 SET(FUR_SRC
       src/sim/FTL.cpp
+      src/sim/PBD.cpp
       src/HairFactory.cpp
       src/Visualizer.cpp
       src/main.cpp
