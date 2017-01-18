@@ -27,21 +27,31 @@ void print(const Hair& h)
 
 int main(int argc, char** argv)
 {
-    Hair h = HairFactory::GrowHair(100/*no. strands*/, 10/*no. of vertices per strand*/);
+    Hair h = HairFactory::GrowHair(100/*no. strands*/, 100/*no. of vertices per strand*/);
     Visualizer::init(argc, argv);    
 
     FTL ftl(h);
-    vec3 force(10,0,0);
-    ftl.addForce(force);
+    ftl.addForce(vec3(10,0,0));
     
+    
+    vec3 force;
+    vec3 gravity(0,-0.8,0);
     for(int i=0; i<60000; i++)
     {
-        if(i%4 == 0)
+        if(i%1 == 0)
         {
             Visualizer::update(h);
         }
         
+        ftl.addForce(gravity);
+        if(i%1000 == 0)
+        {
+            force = vec3(5*sin(i), 0, 10*cos(i));
+            ftl.addForce(force);
+        }
         ftl.update();
+        
+        
     }
     
 //    Visualizer::display(h, argc, argv);
