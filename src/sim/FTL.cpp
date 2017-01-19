@@ -1,4 +1,5 @@
 
+#define restrict __restrict__
 #include "FTL.h"
 
 FTL::FTL(Hair& h) : ISimulation(h)
@@ -9,11 +10,17 @@ FTL::~FTL()
 
 void FTL::addForce(vec3 f)
 {
+Strand* restrict str = this->hair.data();
+#pragma omp simd aligned(str:Alignment)
+#pragma vector aligned
     for(size_t s=0; s < this->hair.size(); s++)
     {
-      for(size_t v=0; v < this->hair[v].size(); v++)
+	Vertex* restrict vert = str[s].data();
+#pragma omp simd aligned(vert:Alignment)
+#pragma vector aligned
+      for(size_t v=0; v < str[s].size(); v++)
       {
-         this->hair[s][v].Force += f;
+         vert[v].Force = f;
       }
     }
 }
@@ -22,23 +29,28 @@ void FTL::update()
 {
   constexpr float TimeStep = 1.0f/125.0f; // mentioned as dt
   constexpr float Damping = 0.96f; //sDamping
-  
+
+Strand* restrict str = this->hair.data();
+//#pragma omp simd aligned(str:Alignment)
 #pragma omp parallel for schedule(static)
+//#pragma omp simd aligned(str:Alignment)
+//#pragma vector aligned
     for(size_t s=0; s < this->hair.size(); s++)
     {
-      Strand& str = this->hair[s];
-      
-#pragma omp aligned(str:Alignment)
-      for(size_t v=1 /*skip the very first vertex*/; v < str.size(); v++)
+      Vertex* restrict x = str[s].data();
+
+            #pragma omp simd aligned(x:Alignment)
+#pragma vector aligned
+      for(size_t v=1 /*skip the very first vertex*/; v < str[s].size(); v++)
       {
-	Vertex& x = [v];
+//	Vertex& x = str[v];
 	
 	// calc new position
-	vec3 p = x.Position + TimeStep * x.Velocity + TimeStep*TimeStep * x.Force; // (1)
+	vec3 p = x[v].Position + TimeStep * x[v].Velocity + TimeStep*TimeStep * x[v].Force; // (1)
 	
 	
 	// solve constraints - (2)
-            Vertex& pre = str[v-1];
+            Vertex& pre = str[s][v-1];
             
             vec3 direction = p - pre.Position;
             direction = glm::normalize(direction);
@@ -56,11 +68,11 @@ void FTL::update()
 	
 	// update velocity + final position + force
 // 	x.Velocity = (p - x.Position) / TimeStep; // (3)
-	x.Velocity = ((p - x.Position) / TimeStep) + Damping * (-d / TimeStep); // (9)
+	x[v].Velocity = ((p - x[v].Position) / TimeStep) + Damping * (-d / TimeStep); // (9)
 	
-	x.Position = p; // (4)
+	x[v].Position = p; // (4)
 	
-	x.Force = vec3(0,0,0);
+	x[v].Force = vec3(0,0,0);
       }
     }
 }
