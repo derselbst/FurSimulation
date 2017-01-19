@@ -23,18 +23,22 @@ void FTL::update()
   constexpr float TimeStep = 1.0f/125.0f; // mentioned as dt
   constexpr float Damping = 0.96f; //sDamping
   
+#pragma omp parallel for schedule(static)
     for(size_t s=0; s < this->hair.size(); s++)
     {
-      for(size_t v=1 /*skip the very first vertex*/; v < this->hair[v].size(); v++)
+      Strand& str = this->hair[s];
+      
+#pragma omp aligned(str:Alignment)
+      for(size_t v=1 /*skip the very first vertex*/; v < str.size(); v++)
       {
-	Vertex& x = this->hair[s][v];
+	Vertex& x = [v];
 	
 	// calc new position
 	vec3 p = x.Position + TimeStep * x.Velocity + TimeStep*TimeStep * x.Force; // (1)
 	
 	
 	// solve constraints - (2)
-            Vertex& pre = this->hair[s][v-1];
+            Vertex& pre = str[v-1];
             
             vec3 direction = p - pre.Position;
             direction = glm::normalize(direction);
