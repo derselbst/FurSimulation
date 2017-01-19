@@ -25,6 +25,7 @@ SET(FUR_SRC
       src/sim/PBD.cpp
       src/HairFactory.cpp
       src/Visualizer.cpp
+      src/Vertex.cpp
       src/main.cpp
 )
 
@@ -38,7 +39,7 @@ include_directories(${GLM_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
 
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
+include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} /usr/include)
 
 add_executable(fur ${FUR_SRC})
 target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY} ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
@@ -51,6 +52,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -DNDEBUG -g")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   # using Clang
+#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Rpass=loop-vectorize -Rpass-analysis=loop-vectorize")
 
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   # using GCC
@@ -59,15 +61,15 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
   # using Intel C++
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -qopenmp")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -qopenmp -qopt-report=5 -qopt-report-phase=vec -restrict")
 
-  add_executable(fur.mic FUR_SRC)
+#  add_executable(fur.mic ${FUR_SRC})
 
   # compile flags only for the host version
   set_target_properties(fur PROPERTIES COMPILE_FLAGS "-xhost")
 
   # compile and link(!) flags only for the Xeon Phi version
-  set_target_properties(fur.mic PROPERTIES COMPILE_FLAGS "-mmic" LINK_FLAGS "-mmic")
+#  set_target_properties(fur.mic PROPERTIES COMPILE_FLAGS "-mmic" LINK_FLAGS "-mmic")
 
 endif()
 
