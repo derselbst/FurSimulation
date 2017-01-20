@@ -11,8 +11,8 @@ FTL::~FTL()
 void FTL::addForce(vec3 f)
 {
 Strand* restrict str = this->hair.data();
-#pragma omp simd aligned(str:Alignment)
-#pragma vector aligned
+//#pragma omp simd aligned(str:Alignment)
+//#pragma vector aligned
     for(size_t s=0; s < this->hair.size(); s++)
     {
 	Vertex* restrict vert = str[s].data();
@@ -20,7 +20,7 @@ Strand* restrict str = this->hair.data();
 #pragma vector aligned
       for(size_t v=0; v < str[s].size(); v++)
       {
-         vert[v].Force = f;
+         vert[v].Force += f;
       }
     }
 }
@@ -31,20 +31,15 @@ void FTL::update()
   constexpr float Damping = 0.96f; //sDamping
 
 Strand* restrict str = this->hair.data();
-//#pragma omp simd aligned(str:Alignment)
 #pragma omp parallel for schedule(static)
-//#pragma omp simd aligned(str:Alignment)
-//#pragma vector aligned
     for(size_t s=0; s < this->hair.size(); s++)
     {
       Vertex* restrict x = str[s].data();
 
-            #pragma omp simd aligned(x:Alignment)
-#pragma vector aligned
+      #pragma omp simd aligned(x:Alignment)
+      #pragma vector aligned
       for(size_t v=1 /*skip the very first vertex*/; v < str[s].size(); v++)
       {
-//	Vertex& x = str[v];
-	
 	// calc new position
 	vec3 p = x[v].Position + TimeStep * x[v].Velocity + TimeStep*TimeStep * x[v].Force; // (1)
 	
