@@ -31,11 +31,11 @@ int main(int argc, char** argv)
     Visualizer::init(argc, argv);    
 
     FTL ftl(h);
-    ftl.addForce(vec3(10,0,0));
+    ftl.addForce(vec3(5,0,0));
     
     
     vec3 force;
-    vec3 gravity(0,-0.05,0);
+    vec3 gravity(0,-0.3,0);
     for(int i=0; i<60000; i++)
     {
         if(i%1 == 0)
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
         ftl.addForce(gravity);
         if(i%10000 == 0)
         {
-            force = vec3(4*sin(i), 0, 4*cos(i));
+            force = vec3(10*sin(i), 0, 10*cos(i));
             ftl.addForce(force);
         }
         ftl.update();

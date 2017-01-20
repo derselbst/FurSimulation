@@ -27,7 +27,7 @@ Strand* restrict str = this->hair.data();
 
 void FTL::update()
 {
-  constexpr float TimeStep = 1.0f/125.0f; // mentioned as dt
+  constexpr float TimeStep = 1.0f/350.0f; // mentioned as dt
   constexpr float Damping = 0.9f; //sDamping
 
 Strand* restrict str = this->hair.data();
