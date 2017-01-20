@@ -27,7 +27,7 @@ void print(const Hair& h)
 
 int main(int argc, char** argv)
 {
-    Hair h = HairFactory::GrowHair(100/*no. strands*/, 100/*no. of vertices per strand*/);
+    Hair h = HairFactory::GrowHair(100/*no. strands*/, 50/*no. of vertices per strand*/);
     Visualizer::init(argc, argv);    
 
     FTL ftl(h);
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     
     
     vec3 force;
-    vec3 gravity(0,-0.8,0);
+    vec3 gravity(0,-0.05,0);
     for(int i=0; i<60000; i++)
     {
         if(i%1 == 0)
@@ -44,9 +44,9 @@ int main(int argc, char** argv)
         }
         
         ftl.addForce(gravity);
-        if(i%1000 == 0)
+        if(i%10000 == 0)
         {
-            force = vec3(5*sin(i), 0, 10*cos(i));
+            force = vec3(4*sin(i), 0, 4*cos(i));
             ftl.addForce(force);
         }
         ftl.update();
