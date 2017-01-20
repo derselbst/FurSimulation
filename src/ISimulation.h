@@ -6,7 +6,7 @@ class ISimulation
 {
 protected:
     Hair& hair;
-  
+
     // this is an interface, even if there were no pure virtual methods, allow
     // construction for child classes only
     ISimulation(Hair& h) : hair(h)
@@ -22,7 +22,7 @@ public:
     virtual ~ISimulation()
     {}
 
-    
+
     virtual void addForce(vec3) = 0;
     virtual void update() = 0;
 

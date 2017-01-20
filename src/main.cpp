@@ -18,7 +18,7 @@ void print(const Hair& h)
         for(size_t v = 0; v<h[s].size(); v++)
         {
             const vec3& pos = h[s][v].Position;
-            
+
             cout << "X: " << pos.x << " Y: " << pos.y << " Z: " << pos.z << endl;
         }
     }
@@ -28,12 +28,12 @@ void print(const Hair& h)
 int main(int argc, char** argv)
 {
     Hair h = HairFactory::GrowHair(100/*no. strands*/, 50/*no. of vertices per strand*/);
-    Visualizer::init(argc, argv);    
+    Visualizer::init(argc, argv);
 
     FTL ftl(h);
     ftl.addForce(vec3(5,0,0));
-    
-    
+
+
     vec3 force;
     vec3 gravity(0,-0.3,0);
     for(int i=0; i<60000; i++)
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
         {
             Visualizer::update(h);
         }
-        
+
         ftl.addForce(gravity);
         if(i%10000 == 0)
         {
@@ -50,13 +50,13 @@ int main(int argc, char** argv)
             ftl.addForce(force);
         }
         ftl.update();
-        
-        
+
+
     }
-    
+
 //    Visualizer::display(h, argc, argv);
-        
+
 //     print(h);
-    
+
     return 0;
 }
