@@ -47,16 +47,16 @@ void FTL::update()
 
 
             // solve constraints - (2)
-            Vertex& pre = str[s][v-1];
+                Vertex& pre = str[s][v-1];
 
-            vec3 direction = x[v].Position - pre.Position;
-            direction = glm::normalize(direction);
+                vec3 direction = x[v].Position - pre.Position;
+                direction = glm::normalize(direction);
 
-            // backup x's new position before we're going to constraint it
-            vec3 pBackup = x[v].Position;
+                // backup x's new position before we're going to constraint it
+                vec3 pBackup = x[v].Position;
 
-            // constraint the new position of vertex x on a sphere of radius l0 around previous vertex
-            x[v].Position = pre.Position + direction * pre.L0;
+                // constraint the new position of vertex x on a sphere of radius l0 around previous vertex
+                x[v].Position = pre.Position + direction * pre.L0;
             // end solve constraint
 
             // update velocity + final position + force
