@@ -1,5 +1,4 @@
 
-#define restrict __restrict__
 #include "FTL.h"
 
 FTL::FTL(Hair& h) : ISimulation(h)
@@ -7,23 +6,6 @@ FTL::FTL(Hair& h) : ISimulation(h)
 
 FTL::~FTL()
 {}
-
-void FTL::addForce(vec3 f)
-{
-    Strand* restrict str = this->hair.data();
-//#pragma omp simd aligned(str:Alignment)
-//#pragma vector aligned
-    for(size_t s=0; s < this->hair.size(); s++)
-    {
-        Vertex* restrict vert = str[s].data();
-        #pragma omp simd aligned(vert:Alignment)
-#pragma vector aligned
-        for(size_t v=0; v < str[s].size(); v++)
-        {
-            vert[v].Force += f;
-        }
-    }
-}
 
 void FTL::update()
 {

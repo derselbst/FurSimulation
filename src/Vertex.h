@@ -4,6 +4,9 @@
 #include <glm/glm.hpp>
 #include <boost/align/aligned_allocator.hpp>
 
+
+#define restrict __restrict__
+
 constexpr size_t Alignment = 64;
 
 template<typename T>

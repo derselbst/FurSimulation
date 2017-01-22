@@ -23,7 +23,7 @@ public:
     {}
 
 
-    virtual void addForce(vec3) = 0;
+    void addForce(vec3);
     virtual void update() = 0;
 
 };
