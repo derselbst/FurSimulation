@@ -3,6 +3,7 @@
 #include "Visualizer.h"
 
 #include "FTL.h"
+#include "PBD.h"
 
 #include <iostream>
 
@@ -30,7 +31,7 @@ int main(int argc, char** argv)
     Hair h = HairFactory::GrowHair(100/*no. strands*/, 50/*no. of vertices per strand*/);
     Visualizer::init(argc, argv);
 
-    FTL ftl(h);
+    PBD ftl(h);
     ftl.addForce(vec3(5,0,0));
 
 
