@@ -2,6 +2,15 @@
 
 #include <exception>
 #include <stdexcept>
+#include <chrono>
+#include <iostream>
+#include <iterator>
+#include <stdlib.h>
+#include <string.h>
+
+using namespace std;
+using chrono::system_clock;
+using chrono::duration;
 
 uint16_t Visualizer::no_saved = 0;
 Hair Visualizer::hair;
@@ -13,6 +22,59 @@ Hair Visualizer::hair;
 //Visualizer::~Visualizer()
 //{
 //}
+
+void Visualizer::save_as_wbmp()
+{
+    std::vector<uint8_t> pixels;
+    pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH);
+
+//    auto t0_start = system_clock::now();
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glReadPixels(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RED, GL_UNSIGNED_BYTE, pixels.data());
+    vector<bool> bPix(pixels.begin(), pixels.begin()+720*720);
+//    auto t0_stop = system_clock::now();
+
+//    cout << "time used rd fb: " << duration<double>(t0_stop - t0_start).count() << endl;
+
+    static char buffer [50];
+    sprintf (buffer, "pictures/%04d.wbmp", no_saved);
+    ++no_saved;
+    std::ofstream fout(buffer, ios::binary);
+
+    if(!fout.good())
+    {
+        throw std::runtime_error("something is wrong with outstream for ppm. does the pictures directory exist?");
+    }
+
+
+    vector<bool> header = { 0,0,0,0,0,0,0,0,
+                            0,0,0,0,0,0,0,0,
+                            1,0,1,0,0,0,0,1,
+                            0,0,0,0,1,0,1,0,
+                            1,0,1,0,0,0,0,1,
+                            0,0,0,0,1,0,1,0};
+
+    char* headerBuf = new char[6];
+    auto t = header.begin()._M_p;
+    memcpy(&headerBuf[0], t, 6);
+
+    fout.write(headerBuf, 6);
+    delete headerBuf;
+
+//    auto t1_start = system_clock::now();
+
+    char* dataBuf = new char[64800];
+    auto dataTmp = bPix.begin()._M_p;
+
+    memcpy(&dataBuf[0], dataTmp, 64800);
+    fout.write(dataBuf, 64800);
+
+    delete dataBuf;
+
+//    auto t1_stop = system_clock::now();
+
+//    cout << "time used wr ppm: " << duration<double>(t1_stop - t1_start).count() << endl;
+}
 
 void Visualizer::save_as_ppm()
 {
