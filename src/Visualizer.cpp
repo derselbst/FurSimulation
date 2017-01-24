@@ -106,7 +106,7 @@ static const SGI_RGB_HEADER header{};
 
 
     static char buffer [50];
-    sprintf (buffer, "pictures/%04d.rgb", no_saved);
+    sprintf (buffer, "pictures/%04d.sgi", no_saved);
     ++no_saved;
     std::ofstream fout(buffer);
     if(!fout.good())
