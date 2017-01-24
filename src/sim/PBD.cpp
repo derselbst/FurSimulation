@@ -9,7 +9,7 @@ PBD::~PBD()
 
 void PBD::update()
 {
-    constexpr float TimeStep = 1.0f/200.0f; // mentioned as dt
+    constexpr float TimeStep = 1.0f/100.0f; // mentioned as dt
     constexpr float Damping = 0.95f; //sDamping
 
     for(size_t s=0; s < this->hair.size(); s++)

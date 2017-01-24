@@ -9,11 +9,12 @@ FTL::~FTL()
 
 void FTL::update()
 {
-    constexpr float TimeStep = 1.0f/350.0f; // mentioned as dt
+    constexpr float TimeStep = 1.0f/125.0f; // mentioned as dt
     constexpr float Damping = 0.9f; //sDamping
 
+    
     Strand* restrict str = this->hair.data();
-    #pragma omp parallel for schedule(static)
+    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
         Vertex* restrict x = str[s].data();

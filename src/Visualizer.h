@@ -9,8 +9,8 @@
 #include <algorithm>
 #include <fstream>
 
-constexpr int16_t IMAGE_WIDTH   = 720;
-constexpr int16_t IMAGE_HEIGHT  = 720;
+constexpr int16_t IMAGE_WIDTH   = 1920;
+constexpr int16_t IMAGE_HEIGHT  = 1080;
 
 class Visualizer
 {
