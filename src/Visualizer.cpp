@@ -76,6 +76,49 @@ void Visualizer::save_as_wbmp()
 //    cout << "time used wr ppm: " << duration<double>(t1_stop - t1_start).count() << endl;
 }
 
+void Visualizer::save_as_sgi()
+{
+  
+typedef struct
+{
+   uint16_t imagic = 474;
+   uint8_t type = 0;// uncompressed
+   uint8_t bpc = 1;// 1 byte per channel
+   uint16_t dim = 2; // usual 2D img
+   uint16_t xsize = IMAGE_WIDTH;
+   uint16_t ysize = IMAGE_HEIGHT;
+   uint16_t zsize = 1; // 1 channel, i.e. grayscale
+   int32_t min = 0;
+   int32_t max = 255;
+   int32_t dummy = 0;
+   char name[80] = {};
+   int32_t colorMap = 0;
+   char dummy[404] = {};
+} SGI_RGB_HEADER;
+
+static const SGI_RGB_HEADER header;
+
+    std::vector<uint8_t> pixels;
+    pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH);
+
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glReadPixels(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RED, GL_UNSIGNED_BYTE, pixels.data());
+
+
+    static char buffer [50];
+    sprintf (buffer, "pictures/%04d.ppm", no_saved);
+    ++no_saved;
+    std::ofstream fout(buffer);
+    if(!fout.good())
+    {
+        throw std::runtime_error("something is wrong with outstream for ppm. does the pictures directory exist?");
+    }
+
+    
+    fout.write(header, sizeof(header));
+    fout.write(pixels.data(), IMAGE_HEIGHT * IMAGE_WIDTH * sizeof(uint8_t));
+}
+
 void Visualizer::save_as_ppm()
 {
     std::vector<uint8_t> pixels;
