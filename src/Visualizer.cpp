@@ -78,25 +78,25 @@ void Visualizer::save_as_wbmp()
 
 void Visualizer::save_as_sgi()
 {
-  
+ // better use htobe16 here, however, depending on implementatiion, only allowed in blockscope 
 typedef struct
 {
-   uint16_t imagic = 474;
-   uint8_t type = 0;// uncompressed
-   uint8_t bpc = 1;// 1 byte per channel
-   uint16_t dim = 2; // usual 2D img
-   uint16_t xsize = IMAGE_WIDTH;
-   uint16_t ysize = IMAGE_HEIGHT;
-   uint16_t zsize = 1; // 1 channel, i.e. grayscale
-   int32_t min = 0;
-   int32_t max = 255;
-   int32_t dummy = 0;
+   int16_t imagic = __builtin_bswap16(474);
+   int8_t type = 0;// uncompressed
+   int8_t bpc = 1;// 1 byte per channel
+   uint16_t dim = __builtin_bswap16(2); // usual 2D img
+   uint16_t xsize = __builtin_bswap16(IMAGE_WIDTH);
+   uint16_t ysize = __builtin_bswap16(IMAGE_HEIGHT);
+   uint16_t zsize = __builtin_bswap16(1); // 1 channel, i.e. grayscale
+   int32_t min = __builtin_bswap32(0);
+   int32_t max = __builtin_bswap32(255);
+   char dummy[4] = {};
    char name[80] = {};
-   int32_t colorMap = 0;
-   char dummy[404] = {};
+   int32_t colorMap = __builtin_bswap32(0);
+   char dummyy[404] = {};
 } SGI_RGB_HEADER;
 
-static const SGI_RGB_HEADER header;
+static const SGI_RGB_HEADER header{};
 
     std::vector<uint8_t> pixels;
     pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH);
@@ -106,7 +106,7 @@ static const SGI_RGB_HEADER header;
 
 
     static char buffer [50];
-    sprintf (buffer, "pictures/%04d.ppm", no_saved);
+    sprintf (buffer, "pictures/%04d.rgb", no_saved);
     ++no_saved;
     std::ofstream fout(buffer);
     if(!fout.good())
@@ -115,8 +115,8 @@ static const SGI_RGB_HEADER header;
     }
 
     
-    fout.write(header, sizeof(header));
-    fout.write(pixels.data(), IMAGE_HEIGHT * IMAGE_WIDTH * sizeof(uint8_t));
+    fout.write(reinterpret_cast<const char*>(&header), sizeof(header));
+    fout.write(reinterpret_cast<const char*>(pixels.data()), IMAGE_HEIGHT * IMAGE_WIDTH * sizeof(uint8_t));
 }
 
 void Visualizer::save_as_ppm()
@@ -167,7 +167,7 @@ void Visualizer::draw_hair()
     glEnd();
     glFlush();
     glDrawBuffer(GL_COLOR_ATTACHMENT3);
-//     Visualizer::save_as_ppm();
+    Visualizer::save_as_sgi();
 }
 
 void Visualizer::update (Hair h) {

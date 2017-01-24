@@ -24,6 +24,7 @@ public:
     static void init(int argc, char **argv);
     static void save_as_ppm();
     static void save_as_wbmp();
+    static void save_as_sgi();
 
     static void update(Hair h);
 
