@@ -101,7 +101,7 @@ static const SGI_RGB_HEADER header{};
     std::vector<uint8_t> pixels;
     pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH);
 
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glReadBuffer(GL_COLOR_ATTACHMENT1);
     glReadPixels(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RED, GL_UNSIGNED_BYTE, pixels.data());
 
 
@@ -166,8 +166,8 @@ void Visualizer::draw_hair()
     }
     glEnd();
     glFlush();
-    glDrawBuffer(GL_COLOR_ATTACHMENT3);
-    Visualizer::save_as_sgi();
+    glDrawBuffer(GL_COLOR_ATTACHMENT1);
+    //Visualizer::save_as_sgi();
 }
 
 void Visualizer::update (Hair h) {
