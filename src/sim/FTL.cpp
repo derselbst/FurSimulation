@@ -12,9 +12,9 @@ void FTL::update()
     constexpr float TimeStep = 1.0f/125.0f; // mentioned as dt
     constexpr float Damping = 0.9f; //sDamping
 
-    
+   const float L0 = Vertex::L0; 
     Strand* restrict str = this->hair.data();
-    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
+    #pragma omp parallel for schedule(static) firstprivate(str,L0) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
         Vertex* restrict x = str[s].data();
@@ -39,7 +39,7 @@ void FTL::update()
                 vec3 pBackup = x[v].Position;
 
                 // constraint the new position of vertex x on a sphere of radius l0 around previous vertex
-                x[v].Position = pre.Position + direction * pre.L0;
+                x[v].Position = pre.Position + direction * L0;
             // end solve constraint
 
             // update velocity + final position + force
