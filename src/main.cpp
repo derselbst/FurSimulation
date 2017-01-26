@@ -6,6 +6,7 @@
 #include "PBD.h"
 
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 
@@ -28,7 +29,11 @@ void print(const Hair& h)
 
 int main(int argc, char** argv)
 {
-    Hair h = HairFactory::GrowHair(1000/*no. strands*/, 50/*no. of vertices per strand*/);
+constexpr int Frames = 100000;
+
+std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+
+    Hair h = HairFactory::GrowHair(100/*no. strands*/, 10/*no. of vertices per strand*/);
     Visualizer::init(argc, argv);
 
     PBD ftl(h);
@@ -37,7 +42,8 @@ int main(int argc, char** argv)
 
     vec3 force;
     vec3 gravity(0,-0.3,0);
-    for(int i=0; i<10000; i++)
+start = std::chrono::high_resolution_clock::now();
+    for(int i=0; i<Frames; i++)
     {
         if(i%1 == 0)
         {
@@ -52,5 +58,11 @@ int main(int argc, char** argv)
         }
         ftl.update();
     }
+
+end = std::chrono::high_resolution_clock::now();
+auto dur =  std::chrono::duration_cast<std::chrono::milliseconds>(end-start);
+ 
+    std::cout << "elapsed time: " << dur.count()/static_cast<double>(Frames) << "ms\n";
+
     return 0;
 }
