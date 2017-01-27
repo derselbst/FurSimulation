@@ -37,7 +37,8 @@ void PBD::update()
         }
     }
 
-    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
+    const float L0 = Vertex::L0;
+    #pragma omp parallel for schedule(static) firstprivate(str,L0) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
 	Vertex* x = str[s].data();
@@ -52,7 +53,7 @@ void PBD::update()
             x[v].Correction = x[v].Position;
 
             // constraint the new position of vertex x on a sphere of radius l0 around previous vertex
-            x[v].Position = x[v-1].Position + direction * x[v-1].L0;
+            x[v].Position = x[v-1].Position + direction * L0;
 
             // correction vector for satisfying the constraint
             x[v].Correction = x[v].Position - x[v].Correction;
