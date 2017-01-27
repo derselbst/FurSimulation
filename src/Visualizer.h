@@ -26,14 +26,10 @@ public:
     static void save_as_wbmp();
     static void save_as_sgi();
 
-    static void update(Hair h);
-
-protected:
+    static void update(Hair h, bool writeImg=false);
 
 private:
-
-
-    static void draw_hair();
+    static void draw_hair(bool writeImg);
 
 };
 

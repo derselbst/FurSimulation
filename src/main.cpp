@@ -26,43 +26,103 @@ void print(const Hair& h)
     }
 }
 
+void usage(char* progname)
+{
+    cout << "Usage: " << progname << " [OPTION]...\n\n"
+         << "\t available options are: \n"
+         << "\t\t --nogl\t\tdont use openGL and dont render anything\n"
+         << "\t\t --write\tcreate SGI images for every rendered frame (--nogl has priority)\n"
+         << "\t\t --ftl\t\tuse simulation method 'Follow the Leader' (default)\n"
+         << "\t\t --pbd\t\tuse simulation method 'Position Based Dynamics'\n" << endl;
+    
+}
+
 
 int main(int argc, char** argv)
 {
-constexpr int Frames = 100000;
-
-std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-
-    Hair h = HairFactory::GrowHair(100/*no. strands*/, 10/*no. of vertices per strand*/);
-    Visualizer::init(argc, argv);
-
-    PBD ftl(h);
-    ftl.addForce(vec3(5,0,0));
+constexpr int Frames = 10000;
 
 
-    vec3 force;
-    vec3 gravity(0,-0.3,0);
-start = std::chrono::high_resolution_clock::now();
-    for(int i=0; i<Frames; i++)
+bool useFTL=true, useGL=true, writeImg=false;
+for(int i=1; i<argc; i++)
+{
+    string arg = string(argv[i]);
+    if(arg == "--help" || arg == "-h")
     {
-        if(i%1 == 0)
-        {
-            Visualizer::update(h);
-        }
+        usage(argv[0]);
+        return 0;
+    }
+    else if (arg == "--write")
+    {
+        writeImg = true;
+        useGL = true;
+    }
+    else if(arg == "--nogl")
+    {
+        useGL = false;
+        writeImg = false;
+    }
+    else if(arg == "--pbd")
+    {
+        useFTL = false;
+    }
+    else if(arg == "--ftl")
+    {
+        useFTL = true;
+    }
+    else
+    {
+        cerr << "Ignoring unknown flag: " << arg << endl;
+    }
+}
 
-        ftl.addForce(gravity);
-        if(i%5000 == 0)
-        {
-            force = vec3(10*sin(i), 0, 10*cos(i));
-            ftl.addForce(force);
-        }
-        ftl.update();
+
+    Hair h = HairFactory::GrowHair(1000/*no. strands*/, 50/*no. of vertices per strand*/);
+
+    if(useGL)
+    {
+    Visualizer::init(argc, argv);
     }
 
+    ISimulation* sim;
+    if(useFTL)
+    {
+        sim = new FTL(h);
+    }
+    else
+    {
+        sim = new PBD(h);
+    }
+
+    // add an initial force
+    sim->addForce(vec3(5,0,0));
+
+    
+    vec3 gravity(0,-0.3,0);
+std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+std::chrono::nanoseconds dur(0);
+    for(int i=0; i<Frames; i++)
+    {
+        if(useGL)
+        {
+            Visualizer::update(h, writeImg);
+        }
+
+        sim->addForce(gravity);
+        if(i%5000 == 0)
+        {
+            vec3 force = vec3(10*sin(i), 0, 10*cos(i));
+            sim->addForce(force);
+        }
+        
+start = std::chrono::high_resolution_clock::now();
+        sim->update();
 end = std::chrono::high_resolution_clock::now();
-auto dur =  std::chrono::duration_cast<std::chrono::milliseconds>(end-start);
+dur +=  std::chrono::duration_cast<std::chrono::nanoseconds>(end-start);
+    }
+
  
-    std::cout << "elapsed time: " << dur.count()/static_cast<double>(Frames) << "ms\n";
+    std::cout << "elapsed time for one update() call: " << dur.count()/(Frames * 1000.0) << "us\n";
 
     return 0;
 }

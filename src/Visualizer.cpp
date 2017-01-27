@@ -152,7 +152,7 @@ void Visualizer::save_as_ppm()
     }
 }
 
-void Visualizer::draw_hair()
+void Visualizer::draw_hair(bool writeImg)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_LINES);
@@ -167,12 +167,16 @@ void Visualizer::draw_hair()
     glEnd();
     glFlush();
     glDrawBuffer(GL_COLOR_ATTACHMENT1);
-    //Visualizer::save_as_sgi();
+    
+    if(writeImg)
+    {
+    Visualizer::save_as_sgi();
+    }
 }
 
-void Visualizer::update (Hair h) {
+void Visualizer::update (Hair h, bool writeImg) {
     hair = h;
-    draw_hair();
+    draw_hair(writeImg);
 }
 
 void Visualizer::init(int argc, char **argv)
@@ -181,6 +185,5 @@ void Visualizer::init(int argc, char **argv)
     glutInitDisplayMode(GLUT_SINGLE);
     glutInitWindowSize(IMAGE_WIDTH, IMAGE_HEIGHT);
     glutCreateWindow("Hair");
-    glutDisplayFunc(Visualizer::draw_hair);
     glutMainLoopEvent();
 }
