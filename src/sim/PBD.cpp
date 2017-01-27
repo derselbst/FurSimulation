@@ -12,54 +12,55 @@ void PBD::update()
     constexpr float TimeStep = 1.0f/100.0f; // mentioned as dt
     constexpr float Damping = 0.95f; //sDamping
 
+    Strand* restrict str = this->hair.data();
+    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
+	Vertex* x = str[s].data();
         for(size_t v=1 /*skip the very first vertex*/; v < this->hair[s].size(); v++)
         {
-            Vertex& x = this->hair[s][v];
-
-            x.OldPosition = x.Position;
+            x[v].OldPosition = x[v].Position;
             // actually accululate forces here, but we already did that outside
         }
     }
 
+    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
+	Vertex* x = str[s].data();
         for(size_t v=1 /*skip the very first vertex*/; v < this->hair[s].size(); v++)
         {
-            Vertex& x = this->hair[s][v];
-
-            const vec3 acceleration = x.Force / x.Mass;
-            x.Velocity += TimeStep * acceleration;
-            x.Position += TimeStep * x.Velocity;
-            x.Force = vec3(0,0,0);
+            const vec3 acceleration = x[v].Force / x[v].Mass;
+            x[v].Velocity += TimeStep * acceleration;
+            x[v].Position += TimeStep * x[v].Velocity;
+            x[v].Force = vec3(0,0,0);
         }
     }
 
+    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
+	Vertex* x = str[s].data();
         for(size_t v=1 /*skip the very first vertex*/; v < this->hair[s].size(); v++)
         {
-            Vertex& x = this->hair[s][v];
             // solve constraints
-            Vertex& pre = this->hair[s][v-1];
 
-            vec3 direction = x.Position - pre.Position;
+            vec3 direction = x[v].Position - x[v-1].Position;
             direction = glm::normalize(direction);
 
             // backup x's unconstrained position
-            x.Correction = x.Position;
+            x[v].Correction = x[v].Position;
 
             // constraint the new position of vertex x on a sphere of radius l0 around previous vertex
-            x.Position = pre.Position + direction * pre.L0;
+            x[v].Position = x[v-1].Position + direction * x[v-1].L0;
 
             // correction vector for satisfying the constraint
-            x.Correction = x.Position - x.Correction;
+            x[v].Correction = x[v].Position - x[v].Correction;
             // end solve constraint
         }
     }
 
-    Strand* restrict str = this->hair.data();
+    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
         Vertex* restrict x = str[s].data();
