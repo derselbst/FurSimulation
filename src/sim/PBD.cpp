@@ -24,7 +24,7 @@ void PBD::update()
         for(size_t v=1 /*skip the very first vertex*/; v < nVert; v++)
         {
             x[v].OldPosition = x[v].Position;
-            // actually accululate forces here, but we already did that outside
+            // actually accululate forces here
         }
     }
 
