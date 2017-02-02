@@ -35,58 +35,58 @@ void usage(char* progname)
          << "\t\t --ftl\t\tuse simulation method 'Follow the Leader' (default)\n"
          << "\t\t --pbd\t\tuse simulation method 'Position Based Dynamics'\n"
          << "\t\t --forever\tinfinite running demo\n" << endl;
-    
+
 }
 
 
 int main(int argc, char** argv)
 {
-constexpr int Frames = 10000;
+    constexpr int Frames = 10000;
 
 
-bool useFTL=true, useGL=true, writeImg=false, forever=false;
-for(int i=1; i<argc; i++)
-{
-    string arg = string(argv[i]);
-    if(arg == "--help" || arg == "-h")
+    bool useFTL=true, useGL=true, writeImg=false, forever=false;
+    for(int i=1; i<argc; i++)
     {
-        usage(argv[0]);
-        return 0;
+        string arg = string(argv[i]);
+        if(arg == "--help" || arg == "-h")
+        {
+            usage(argv[0]);
+            return 0;
+        }
+        else if (arg == "--write")
+        {
+            writeImg = true;
+            useGL = true;
+        }
+        else if(arg == "--nogl")
+        {
+            useGL = false;
+            writeImg = false;
+        }
+        else if(arg == "--pbd")
+        {
+            useFTL = false;
+        }
+        else if(arg == "--ftl")
+        {
+            useFTL = true;
+        }
+        else if(arg == "--forever")
+        {
+            forever = true;
+        }
+        else
+        {
+            cerr << "Ignoring unknown flag: " << arg << endl;
+        }
     }
-    else if (arg == "--write")
-    {
-        writeImg = true;
-        useGL = true;
-    }
-    else if(arg == "--nogl")
-    {
-        useGL = false;
-        writeImg = false;
-    }
-    else if(arg == "--pbd")
-    {
-        useFTL = false;
-    }
-    else if(arg == "--ftl")
-    {
-        useFTL = true;
-    }
-    else if(arg == "--forever")
-    {
-        forever = true;
-    }
-    else
-    {
-        cerr << "Ignoring unknown flag: " << arg << endl;
-    }
-}
 
 
     Hair h = HairFactory::GrowHair(1000/*no. strands*/, 50/*no. of vertices per strand*/);
 
     if(useGL)
     {
-    Visualizer::init(argc, argv);
+        Visualizer::init(argc, argv);
     }
 
     ISimulation* sim;
@@ -102,10 +102,10 @@ for(int i=1; i<argc; i++)
     // add an initial force
     sim->addForce(vec3(5,0,0));
 
-    
+
     vec3 gravity(0,-0.3,0);
-std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-std::chrono::nanoseconds dur(0);
+    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+    std::chrono::nanoseconds dur(0);
     for(int i=0; forever || i<Frames; i++)
     {
         if(useGL)
@@ -119,14 +119,14 @@ std::chrono::nanoseconds dur(0);
             vec3 force = vec3(10*sin(i), 0, 10*cos(i));
             sim->addForce(force);
         }
-        
-start = std::chrono::high_resolution_clock::now();
+
+        start = std::chrono::high_resolution_clock::now();
         sim->update();
-end = std::chrono::high_resolution_clock::now();
-dur +=  std::chrono::duration_cast<std::chrono::nanoseconds>(end-start);
+        end = std::chrono::high_resolution_clock::now();
+        dur +=  std::chrono::duration_cast<std::chrono::nanoseconds>(end-start);
     }
 
- 
+
     std::cout << "elapsed time for one update() call: " << dur.count()/(Frames * 1000.0) << "us\n";
 
     return 0;

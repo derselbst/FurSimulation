@@ -36,10 +36,10 @@ Hair HairFactory::GrowHairOnPlane(const size_t nStrands, const size_t nVert)
     vec3 startPos(0,0.5,0);
     const size_t Layers = 2;
     const double Len = 0.5;
-    
+
     Vertex::L0 = Len/nVert;
 
-    
+
     for(size_t layer=0; layer < Layers; layer++)
     {
         startPos.x = -0.8 +  (layer*0.015 / Layers);

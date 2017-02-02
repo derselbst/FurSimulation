@@ -17,7 +17,7 @@ void PBD::update()
     for(size_t s=0; s < this->hair.size(); s++)
     {
         const size_t nVert = str[s].size();
-	Vertex* restrict x = str[s].data();
+        Vertex* restrict x = str[s].data();
 
         #pragma omp simd aligned(x:Alignment)
         #pragma vector aligned
@@ -50,7 +50,7 @@ void PBD::update()
     for(size_t s=0; s < this->hair.size(); s++)
     {
         const size_t nVert = str[s].size();
-	Vertex* restrict x = str[s].data();
+        Vertex* restrict x = str[s].data();
 
         #pragma omp simd aligned(x:Alignment)
         #pragma vector aligned

@@ -52,7 +52,8 @@ void Visualizer::save_as_wbmp()
                             1,0,1,0,0,0,0,1,
                             0,0,0,0,1,0,1,0,
                             1,0,1,0,0,0,0,1,
-                            0,0,0,0,1,0,1,0};
+                            0,0,0,0,1,0,1,0
+                          };
 
     char* headerBuf = new char[6];
     auto t = header.begin()._M_p;
@@ -78,25 +79,25 @@ void Visualizer::save_as_wbmp()
 
 void Visualizer::save_as_sgi()
 {
- // better use htobe16 here, however, depending on implementatiion, only allowed in blockscope 
-typedef struct
-{
-   int16_t imagic = __builtin_bswap16(474);
-   int8_t type = 0;// uncompressed
-   int8_t bpc = 1;// 1 byte per channel
-   uint16_t dim = __builtin_bswap16(2); // usual 2D img
-   uint16_t xsize = __builtin_bswap16(IMAGE_WIDTH);
-   uint16_t ysize = __builtin_bswap16(IMAGE_HEIGHT);
-   uint16_t zsize = __builtin_bswap16(1); // 1 channel, i.e. grayscale
-   int32_t min = __builtin_bswap32(0);
-   int32_t max = __builtin_bswap32(255);
-   char dummy[4] = {};
-   char name[80] = {};
-   int32_t colorMap = __builtin_bswap32(0);
-   char dummyy[404] = {};
-} SGI_RGB_HEADER;
+// better use htobe16 here, however, depending on implementatiion, only allowed in blockscope
+    typedef struct
+    {
+        int16_t imagic = __builtin_bswap16(474);
+        int8_t type = 0;// uncompressed
+        int8_t bpc = 1;// 1 byte per channel
+        uint16_t dim = __builtin_bswap16(2); // usual 2D img
+        uint16_t xsize = __builtin_bswap16(IMAGE_WIDTH);
+        uint16_t ysize = __builtin_bswap16(IMAGE_HEIGHT);
+        uint16_t zsize = __builtin_bswap16(1); // 1 channel, i.e. grayscale
+        int32_t min = __builtin_bswap32(0);
+        int32_t max = __builtin_bswap32(255);
+        char dummy[4] = {};
+        char name[80] = {};
+        int32_t colorMap = __builtin_bswap32(0);
+        char dummyy[404] = {};
+    } SGI_RGB_HEADER;
 
-static const SGI_RGB_HEADER header{};
+    static const SGI_RGB_HEADER header {};
 
     std::vector<uint8_t> pixels;
     pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH);
@@ -114,7 +115,7 @@ static const SGI_RGB_HEADER header{};
         throw std::runtime_error("something is wrong with outstream for ppm. does the pictures directory exist?");
     }
 
-    
+
     fout.write(reinterpret_cast<const char*>(&header), sizeof(header));
     fout.write(reinterpret_cast<const char*>(pixels.data()), IMAGE_HEIGHT * IMAGE_WIDTH * sizeof(uint8_t));
 }
@@ -167,14 +168,15 @@ void Visualizer::draw_hair(bool writeImg)
     glEnd();
     glFlush();
     glDrawBuffer(GL_COLOR_ATTACHMENT1);
-    
+
     if(writeImg)
     {
-    Visualizer::save_as_sgi();
+        Visualizer::save_as_sgi();
     }
 }
 
-void Visualizer::update (Hair h, bool writeImg) {
+void Visualizer::update (Hair h, bool writeImg)
+{
     hair = h;
     draw_hair(writeImg);
 }

@@ -30,7 +30,7 @@ public:
      * adds the given force to each and every hair strand
      */
     void addForce(vec3 force);
-    
+
     /**
      * performs a single time step update of the hair simulation
      */
