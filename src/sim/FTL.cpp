@@ -12,7 +12,7 @@ void FTL::update()
     constexpr float TimeStep = 1.0f/125.0f; // mentioned as dt
     constexpr float Damping = 0.9f; //sDamping
 
-   const float L0 = Vertex::L0; 
+    const float L0 = Vertex::L0; 
     Strand* restrict str = this->hair.data();
     #pragma omp parallel for schedule(static) firstprivate(str,L0) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
@@ -20,8 +20,8 @@ void FTL::update()
         Vertex* restrict x = str[s].data();
         const size_t nVert = this->hair[s].size();
         #pragma omp simd aligned(x:Alignment)
-        #pragma vector aligned
-        for(size_t v=nVert-1; v >= 1; v--)
+        #pragma vector aligned(x)
+        for(size_t v=nVert-1; v >= 1; v--) // start with the last vertex, since we its correction vector for its predecessor
         {
             x[v].OldPosition = x[v].Position; // (4)
 
