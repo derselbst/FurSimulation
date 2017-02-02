@@ -16,8 +16,9 @@ void PBD::update()
     #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
-	Vertex* x = str[s].data();
-        for(size_t v=1 /*skip the very first vertex*/; v < this->hair[s].size(); v++)
+        const size_t nVert = str[s].size();
+	Vertex* restrict x = str[s].data();
+        for(size_t v=1 /*skip the very first vertex*/; v < nVert; v++)
         {
             x[v].OldPosition = x[v].Position;
             // actually accululate forces here, but we already did that outside
@@ -27,8 +28,9 @@ void PBD::update()
     #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
-	Vertex* x = str[s].data();
-        for(size_t v=1 /*skip the very first vertex*/; v < this->hair[s].size(); v++)
+        const size_t nVert = str[s].size();
+	Vertex* restrict x = str[s].data();
+        for(size_t v=1; v < nVert; v++)
         {
             const vec3 acceleration = x[v].Force / x[v].Mass;
             x[v].Velocity += TimeStep * acceleration;
@@ -41,8 +43,9 @@ void PBD::update()
     #pragma omp parallel for schedule(static) firstprivate(str,L0) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
-	Vertex* x = str[s].data();
-        for(size_t v=1 /*skip the very first vertex*/; v < this->hair[s].size(); v++)
+        const size_t nVert = str[s].size();
+	Vertex* restrict x = str[s].data();
+        for(size_t v=1; v < nVert; v++)
         {
             // solve constraints
 
@@ -64,8 +67,8 @@ void PBD::update()
     #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
+        const size_t nVert = str[s].size();
         Vertex* restrict x = str[s].data();
-        const size_t nVert = this->hair[s].size();
         for(size_t v=1; v < nVert; v++)
         {            
             x[v].Velocity = ((x[v].Position - x[v].OldPosition) / TimeStep);
