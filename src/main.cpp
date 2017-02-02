@@ -33,7 +33,7 @@ void usage(char* progname)
          << "\t\t --nogl\t\tdont use openGL and dont render anything\n"
          << "\t\t --write\tcreate SGI images for every rendered frame (--nogl has priority)\n"
          << "\t\t --ftl\t\tuse simulation method 'Follow the Leader' (default)\n"
-         << "\t\t --pbd\t\tuse simulation method 'Position Based Dynamics'\n";
+         << "\t\t --pbd\t\tuse simulation method 'Position Based Dynamics'\n"
          << "\t\t --forever\tinfinite running demo\n" << endl;
     
 }
