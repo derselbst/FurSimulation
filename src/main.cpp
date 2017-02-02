@@ -109,7 +109,7 @@ std::chrono::nanoseconds dur(0);
         }
 
         sim->addForce(gravity);
-        if(i%5000 == 0)
+        if(i!=0 && i%5000 == 0)
         {
             vec3 force = vec3(10*sin(i), 0, 10*cos(i));
             sim->addForce(force);
