@@ -33,7 +33,8 @@ void usage(char* progname)
          << "\t\t --nogl\t\tdont use openGL and dont render anything\n"
          << "\t\t --write\tcreate SGI images for every rendered frame (--nogl has priority)\n"
          << "\t\t --ftl\t\tuse simulation method 'Follow the Leader' (default)\n"
-         << "\t\t --pbd\t\tuse simulation method 'Position Based Dynamics'\n" << endl;
+         << "\t\t --pbd\t\tuse simulation method 'Position Based Dynamics'\n";
+         << "\t\t --forever\tinfinite running demo\n" << endl;
     
 }
 
@@ -43,7 +44,7 @@ int main(int argc, char** argv)
 constexpr int Frames = 10000;
 
 
-bool useFTL=true, useGL=true, writeImg=false;
+bool useFTL=true, useGL=true, writeImg=false, forever=false;
 for(int i=1; i<argc; i++)
 {
     string arg = string(argv[i]);
@@ -69,6 +70,10 @@ for(int i=1; i<argc; i++)
     else if(arg == "--ftl")
     {
         useFTL = true;
+    }
+    else if(arg == "--forever")
+    {
+        forever = true;
     }
     else
     {
@@ -101,7 +106,7 @@ for(int i=1; i<argc; i++)
     vec3 gravity(0,-0.3,0);
 std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
 std::chrono::nanoseconds dur(0);
-    for(int i=0; i<Frames; i++)
+    for(int i=0; forever || i<Frames; i++)
     {
         if(useGL)
         {
