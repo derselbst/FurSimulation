@@ -18,6 +18,9 @@ void PBD::update()
     {
         const size_t nVert = str[s].size();
 	Vertex* restrict x = str[s].data();
+
+        #pragma omp simd aligned(x:Alignment)
+        #pragma vector aligned
         for(size_t v=1 /*skip the very first vertex*/; v < nVert; v++)
         {
             x[v].OldPosition = x[v].Position;
@@ -30,6 +33,9 @@ void PBD::update()
     {
         const size_t nVert = str[s].size();
 	Vertex* restrict x = str[s].data();
+
+        #pragma omp simd aligned(x:Alignment)
+        #pragma vector aligned
         for(size_t v=1; v < nVert; v++)
         {
             const vec3 acceleration = x[v].Force / x[v].Mass;
@@ -45,6 +51,9 @@ void PBD::update()
     {
         const size_t nVert = str[s].size();
 	Vertex* restrict x = str[s].data();
+
+        #pragma omp simd aligned(x:Alignment)
+        #pragma vector aligned
         for(size_t v=1; v < nVert; v++)
         {
             // solve constraints
@@ -69,6 +78,9 @@ void PBD::update()
     {
         const size_t nVert = str[s].size();
         Vertex* restrict x = str[s].data();
+
+        #pragma omp simd aligned(x:Alignment)
+        #pragma vector aligned
         for(size_t v=1; v < nVert; v++)
         {            
             x[v].Velocity = ((x[v].Position - x[v].OldPosition) / TimeStep);
