@@ -185,7 +185,7 @@ shadow
 \usepackage{nameref}
 \newcommand*{\mytitle}{Simulation of Inextensible Hair and Fur} % Title
 \newcommand*{\runninghead}{\@currentlabelname} % Running head displayed on almost all slides
-\newcommand*{\myauthor}{Tom Uwe Möbert \& Mathias Putz} % Presenters name(s)
+\newcommand*{\myauthor}{Tom Möbert \& Mathias Putz} % Presenters name(s)
 \newcommand*{\mydate}{2. February 2017} % Presentation date
 \newcommand*{\myuni}{Simulation of Inextensible Hair and Fur} % University or department
 \newcommand*{\myemail}{} % University or department
@@ -287,7 +287,7 @@ at one end ($x_1,...,x_n$).
 %	4
 %----------------------------------------------------------------------------------------
 
-\section{\color{white}How to fullfill the constraints}
+\section{\color{white}How to fulfill the constraints}
 
 Process called Follow-The-Leader (a).
 \begin{itemize}
@@ -340,7 +340,7 @@ p \rightarrow x
 %	6
 %----------------------------------------------------------------------------------------
 
-\section{\color{white}What happend}
+\section{\color{white}What happened}
 
 \begin{wrapfigure}{r}{0.55\textwidth}
 	\vspace{-1cm}
@@ -355,7 +355,7 @@ To fix that bug we need a \textbf{velocity correction} by using damping (c).
 \frac{x_i - p_i}{\Delta t} + s_{damping}\frac{-d_{i+1}}{\Delta t} \rightarrow v_i
 \end{eqnarray}
 
-With the correction vector $d_i$ ans $s_{damping} \in [0,1]$.
+With the correction vector $d_i$ and $s_{damping} \in [0,1]$.
 
 \begin{center}
 \begin{framed}
@@ -369,9 +369,58 @@ With the correction vector $d_i$ ans $s_{damping} \in [0,1]$.
 %	7
 %----------------------------------------------------------------------------------------
 
-\section{\color{white}Our implentation}
+\section{\color{white}Our implementation}
 
-\lipsum[1]
+\begin{itemize}
+\setlength\itemsep{-5mm}
+\item openGL and openMP is used
+\item implementation of 2 different algorithms
+\item display and save simulation
+\item used aligned data-structure (64 byte without padding) for all vertexes
+\item debug vs release build speedup: 6 @ PBD, 16 @ FTL
+\item measured average time of 10000 pictures with 1000 strands and 50 vertexes each
+\item speedup:
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+threads & 2 & 4 & 8 & 12 & 16 \\
+\hline
+FTL & 1.4 & 2.6 & 5.1 & 7.6 & 9.7\\
+\hline
+PBD & 1.4 & 2.6 & 5.2 & 7.6 & 10.0\\
+\hline
+\end{tabular}
+\end{center}
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	8
+%----------------------------------------------------------------------------------------
+
+\section{\color{white}Times}
+
+\begin{center}
+\begin{framed}
+\includegraphics[scale=0.6]{Bilder/4.png}
+\end{framed}
+\end{center}
+
+
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	9
+%----------------------------------------------------------------------------------------
+
+\begin{center}
+%\begin{framed}
+\includegraphics[scale=0.65]{Bilder/5.png}
+%\end{framed}
+\end{center}
+
 
 \clearpage
 
