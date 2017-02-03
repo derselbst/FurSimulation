@@ -15,26 +15,19 @@ using chrono::duration;
 uint16_t Visualizer::no_saved = 0;
 Hair Visualizer::hair;
 
-//Visualizer::Visualizer()
-//{
-//}
-//
-//Visualizer::~Visualizer()
-//{
-//}
 
+/**save_as_wbmp is obsolete, use save_as_sgi instead**/
+/*
+    save 720x720 picture in wbmp-format (not ASCII-coded)
+*/
 void Visualizer::save_as_wbmp()
 {
     std::vector<uint8_t> pixels;
     pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH);
 
-//    auto t0_start = system_clock::now();
-    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glReadBuffer(GL_COLOR_ATTACHMENT1);
     glReadPixels(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RED, GL_UNSIGNED_BYTE, pixels.data());
     vector<bool> bPix(pixels.begin(), pixels.begin()+720*720);
-//    auto t0_stop = system_clock::now();
-
-//    cout << "time used rd fb: " << duration<double>(t0_stop - t0_start).count() << endl;
 
     static char buffer [50];
     sprintf (buffer, "pictures/%04d.wbmp", no_saved);
@@ -55,14 +48,13 @@ void Visualizer::save_as_wbmp()
                             0,0,0,0,1,0,1,0
                           };
 
+    //some wild memory copy
     char* headerBuf = new char[6];
     auto t = header.begin()._M_p;
     memcpy(&headerBuf[0], t, 6);
 
     fout.write(headerBuf, 6);
     delete headerBuf;
-
-//    auto t1_start = system_clock::now();
 
     char* dataBuf = new char[64800];
     auto dataTmp = bPix.begin()._M_p;
@@ -71,10 +63,6 @@ void Visualizer::save_as_wbmp()
     fout.write(dataBuf, 64800);
 
     delete dataBuf;
-
-//    auto t1_stop = system_clock::now();
-
-//    cout << "time used wr ppm: " << duration<double>(t1_stop - t1_start).count() << endl;
 }
 
 void Visualizer::save_as_sgi()
@@ -120,15 +108,16 @@ void Visualizer::save_as_sgi()
     fout.write(reinterpret_cast<const char*>(pixels.data()), IMAGE_HEIGHT * IMAGE_WIDTH * sizeof(uint8_t));
 }
 
+/**save_as_ppm is obsolete, use save_as_sgi instead**/
 void Visualizer::save_as_ppm()
 {
     std::vector<uint8_t> pixels;
     pixels.reserve(IMAGE_HEIGHT * IMAGE_WIDTH * 3);
 
-    glReadBuffer(GL_COLOR_ATTACHMENT3);
+    glReadBuffer(GL_COLOR_ATTACHMENT1);
     glReadPixels(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
 
-    std::reverse(pixels.begin(), pixels.end());
+//    std::reverse(pixels.begin(), pixels.end());//not necessary
 
     static char buffer [50];
     sprintf (buffer, "pictures/%04d.ppm", no_saved);
@@ -141,6 +130,7 @@ void Visualizer::save_as_ppm()
 
     fout << "P3" << "\n" << IMAGE_WIDTH << " " << IMAGE_HEIGHT << "\n" << 255 << "\n";
 
+//    too slow better use binary write
     int32_t k = 0;
     for(int32_t i=0; i<IMAGE_HEIGHT; i++)
     {
