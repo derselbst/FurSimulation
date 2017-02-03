@@ -19,8 +19,12 @@ void FTL::update()
     {
         Vertex* restrict x = str[s].data();
         const size_t nVert = this->hair[s].size();
-        #pragma omp simd aligned(x:Alignment)
-        #pragma vector aligned(x)
+
+// these two pragmas were actually meant to vectorize this inner loop
+// however, since we have data dependence (we need the predecessing vertex to solve the constraint and the sucessing one for applying the correction vector), we dont see a way to properly vectorize this inner loop.
+// @LARS uncomment the pragmas, build with icpc at -O3 to see very strange behaviour
+//        #pragma omp simd aligned(x:Alignment)
+//        #pragma vector aligned(x)
         for(size_t v=nVert-1; v >= 1; v--) // start with the last vertex, since we its correction vector for its predecessor
         {
             x[v].OldPosition = x[v].Position; // (4)
@@ -43,8 +47,7 @@ void FTL::update()
             // end solve constraint
 
             // update velocity + final position + force
-//          x.Velocity = (p - x.OldPosition) / TimeStep; // (3)
-            x[v].Velocity = ((x[v].Position - x[v].OldPosition) / TimeStep);
+            x[v].Velocity = ((x[v].Position - x[v].OldPosition) / TimeStep); // (3)
 
             // correct the velocity with the correction vector computed for previous vertex
             // obviously this is not possible for the last particle, so add 0 in this case

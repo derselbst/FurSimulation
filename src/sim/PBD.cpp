@@ -52,8 +52,9 @@ void PBD::update()
         const size_t nVert = str[s].size();
         Vertex* restrict x = str[s].data();
 
-        #pragma omp simd aligned(x:Alignment)
-        #pragma vector aligned
+// avoid vectorization here, due to v-1 dependency, else cause glitches when compiled with icpc, also see comment in FTL::update()
+//        #pragma omp simd aligned(x:Alignment)
+//        #pragma vector aligned
         for(size_t v=1; v < nVert; v++)
         {
             // solve constraints
@@ -89,7 +90,7 @@ void PBD::update()
             // obviously this is not possible for the last particle, so add 0 in this case
             x[v].Velocity += (v+1>=this->hair[v].size()) ? vec3(0,0,0) : Damping * (-x[v+1].Correction / TimeStep); // (9)
             
-            // uncomment this while commenting the very first OldPos assignment to get an interesting begin
+            // uncomment this while commenting the very first OldPos assignment to get an interesting beginning
 //             x[v].OldPosition = x[v].Position;
         }
     }
