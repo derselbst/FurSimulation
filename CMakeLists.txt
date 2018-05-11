@@ -45,24 +45,34 @@ include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} /usr/include)
 add_executable(fur ${FUR_SRC})
 target_link_libraries(fur ${GLM_LIBRARIES} ${GLM_LIBRARY} ${Boost_LIBRARIES} ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
+find_package ( OpenMP QUIET )
+if ( OpenMP_FOUND OR OpenMP_C_FOUND )
+    message(STATUS "Found OpenMP ${OpenMP_CXX_SPEC_DATE}")
+    # require at least OMP 4.0
+    if ( ( NOT OpenMP_CXX_SPEC_DATE LESS "201307" ) OR NOT ( OpenMP_CXX_VERSION VERSION_LESS "4.0" ) )
+        set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}" )
+         set ( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}" )
+         target_link_libraries (fur ${OpenMP_CXX_LIBRARIES} )
+    endif()
+endif()
 
-set(CMAKE_CXX_FLAGS "-pedantic -std=c++11 -Wall")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -DNDEBUG -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O3 -DNDEBUG -g")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   # using Clang
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -Rpass=loop-vectorize -Rpass-analysis=loop-vectorize")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Rpass=loop-vectorize -Rpass-analysis=loop-vectorize")
 
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   # using GCC
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
   # using Intel C++
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -qopenmp -qopt-report=5 -qopt-report-phase=vec -restrict")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -qopt-report=5 -qopt-report-phase=vec -restrict")
 
 #  add_executable(fur.mic ${FUR_SRC})
 
