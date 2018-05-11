@@ -9,9 +9,9 @@ void ISimulation::addForce(vec3 f)
     for(size_t s=0; s < this->hair.size(); s++)
     {
         Vertex* restrict vert = str[s].data();
+        size_t nVert = str[s].size();
         #pragma omp simd aligned(vert:Alignment)
-        #pragma vector aligned
-        for(size_t v=0; v < str[s].size(); v++)
+        for(size_t v=0; v < nVert; v++)
         {
             vert[v].Force += f;
         }

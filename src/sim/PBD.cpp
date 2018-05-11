@@ -14,7 +14,7 @@ void PBD::update()
 
     const float L0 = Vertex::L0;
     Strand* restrict str = this->hair.data();
-    #pragma omp parallel firstprivate(str) shared(L0) default(none)
+    #pragma omp parallel firstprivate(str) default(none)
     {
         #pragma omp for schedule(static) nowait
         for(size_t s=0; s < this->hair.size(); s++)
@@ -23,11 +23,10 @@ void PBD::update()
             Vertex* restrict x = str[s].data();
 
             #pragma omp simd aligned(x:Alignment)
-            #pragma vector aligned
             for(size_t v=1 /*skip the very first vertex*/; v < nVert; v++)
             {
                 x[v].OldPosition = x[v].Position;
-                // actually accululate forces here
+                // actually accumulate forces here
             }
         }
 
@@ -38,7 +37,6 @@ void PBD::update()
             Vertex* restrict x = str[s].data();
 
             #pragma omp simd aligned(x:Alignment)
-            #pragma vector aligned
             for(size_t v=1; v < nVert; v++)
             {
                 const vec3 acceleration = x[v].Force / x[v].Mass;
@@ -83,7 +81,6 @@ void PBD::update()
             Vertex* restrict x = str[s].data();
 
             #pragma omp simd aligned(x:Alignment)
-            #pragma vector aligned
             for(size_t v=1; v < nVert; v++)
             {            
                 x[v].Velocity = ((x[v].Position - x[v].OldPosition) / TimeStep);

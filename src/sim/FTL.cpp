@@ -14,7 +14,7 @@ void FTL::update()
 
     const float L0 = Vertex::L0; 
     Strand* restrict str = this->hair.data();
-    #pragma omp parallel for schedule(static) firstprivate(str,L0) default(none)
+    #pragma omp parallel for schedule(static) firstprivate(str) default(none)
     for(size_t s=0; s < this->hair.size(); s++)
     {
         Vertex* restrict x = str[s].data();
