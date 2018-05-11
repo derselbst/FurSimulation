@@ -6,7 +6,9 @@ A sample implementation of the hair simulation algorithm presented in the paper
 
 *by M.Müller, T.Y.Kim and N.Chentanez*
 
+![FTL Screenshot](Screenshot_FTL.png)
 
-See
+For further references see
+* https://github.com/derselbst/FurSimulation/raw/master/presentation/presentation.pdf
 * http://matthiasmueller.info/publications/FTLHairFur.pdf
 * http://youtu.be/zB8Fqbfrrpo
